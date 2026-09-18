@@ -1,36 +1,34 @@
-[![Review Assignment Due Date](https://classroom.github.com/assets/deadline-readme-button-22041afd0340ce965d47ae6ef1cefeee28c7c493a6346c4f15d667ab976d596c.svg)](https://classroom.github.com/a/3SRI_-8J)
-[![Open in Codespaces](https://classroom.github.com/assets/launch-codespace-2972f46106e565e64193e422d61a12cf1da4916b45550586e14ef0a7c637dd04.svg)](https://classroom.github.com/open-in-codespaces?assignment_repo_id=23362254)
-# Proiect PA 2025
+# PA 2025 Project
 
-Repository-ul conține scheletul proiectului și testele publice.
+The repository contains the project skeleton and the public tests.
 
-## Structură
+## Structure
 
 `include/`
-Headerele pentru modulele cerute.
+The headers for the required modules.
 
 `src/`
-Fișierele pe care trebuie să le completați.
+The files you need to complete.
 
 `tests/public/`
-Teste publice pentru fiecare pas. Aici găsiți fișierele de intrare și ieșirea așteptată.
+Public tests for each step. Here you can find the input files and the expected output.
 
 `build/`
-Conține binarele pentru rularea testelor publice:
+Contains the binaries for running the public tests:
 - `build/public_pas1`
 - `build/public_pas2`
 - `build/public_pas3`
 - `build/public_pas4`
 
-## Rulare teste publice
+## Running the public tests
 
-Pentru a rula toate testele publice:
+To run all the public tests:
 
 ```bash
 make public-test
 ```
 
-Pentru a rula testele publice doar pentru un pas:
+To run the public tests for only one step:
 
 ```bash
 ./build/public_pas1 tests/public/pas1/entitati.csv tests/public/pas1/relatii.csv tests/public/pas1/interogari.txt
@@ -39,80 +37,80 @@ Pentru a rula testele publice doar pentru un pas:
 ./build/public_pas4 tests/public/pas4/entitati.csv tests/public/pas4/relatii.csv tests/public/pas4/interogari.txt
 ```
 
-Fiecare test public are și un fișier `expected.txt` cu rezultatul așteptat.
+Each public test also has an `expected.txt` file with the expected result.
 
-## Teste publice și teste private
+## Public tests and private tests
 
-Există două tipuri de teste:
-- teste publice, incluse în acest repository;
-- teste private, folosite la evaluare.
+There are two types of tests:
+- public tests, included in this repository;
+- private tests, used for evaluation.
 
-Faptul că testele publice trec nu garantează punctaj maxim.
+The fact that the public tests pass does not guarantee a maximum score.
 
-## Documentație implementare
+## Implementation documentation
 
-## Descriere generală
-Aplicația implementează un graf de cunoștințe ponderat care stochează entități, reprezentate de persoane, companii, locații sau evenimente, și relațiile între acestea. Datele se citesc din fișierele CSV, indexate pentru căutare, iar interogările sunt puse într-o coadă.
+## General description
+The application implements a weighted knowledge graph that stores entities, represented by people, companies, locations, or events, and the relationships between them. The data is read from CSV files, indexed for searching, and the queries are placed in a queue.
 
-## Structuri de date utilizate
+## Data structures used
 
-### 1.Graf cu liste de adiacență
-Structurile: Graph, GraphNode și EdgeNode.
-Graful este reprezentat printr-un tablou alocat dinamic de noduri, fiecare nod având propria listă de adiacență. Fiecare entitate devine un nod al grafului, inițial cu lista de muchii vidă.
+### 1. Graph with adjacency lists
+Structures: Graph, GraphNode, and EdgeNode.
+The graph is represented by a dynamically allocated array of nodes, each node having its own adjacency list. Each entity becomes a node of the graph, initially with an empty edge list.
 
-De ce este eficient?
-Graful este sparse(are numărul de muchii < n²). O matrice de adiacență ar fi ocupat mai multă memorie indiferent de numărul de muchii, iar în cazul nostru listele de adiacență ocupă O(n+m) spațiu.
+Why is it efficient?
+The graph is sparse (it has the number of edges < n²). An adjacency matrix would have occupied more memory regardless of the number of edges, and in our case, the adjacency lists occupy O(n+m) space.
 
-### 2.Listă simplu înlănțuită de entități
-Pe măsura citirii fiecare entitate este adăugată într-o listă simplu înlănțuită, care servește ca un fel de registru al tuturor entităților.
+### 2. Singly linked list of entities
+As it is read, each entity is added to a singly linked list, which serves as a kind of registry of all entities.
 
-De ce este eficient?
-Lista permite acces repetat la toate entitățile fără a le distruge și de aceea folosirea ei este mai eficientă în locul unei cozi spre exemplu.
+Why is it efficient?
+The list allows repeated access to all entities without destroying them, and that is why using it is more efficient instead of a queue, for example.
 
-### 3.Binary Search Tree indexat după nume
-Structurile: BST și BSTNode.
-Nodurile grafului sunt indexate într-un BST după numele entităților. Nodurile din BST conțin doar pointeri în tabloul grafului fără a duplica datele.
+### 3. Binary Search Tree indexed by name
+Structures: BST and BSTNode.
+The graph nodes are indexed in a BST by the names of the entities. The BST nodes contain only pointers into the graph array without duplicating the data.
 
-De ce este eficient?
-Pentru a căuta prin lista de entități acesta este mai eficient deoarece reduce căutarea la O(log n) într-un caz mediu.
+Why is it efficient?
+For searching through the list of entities, this is more efficient because it reduces the search to O(log n) in an average case.
 
-### 4.Coadă
-Structurile: Queue și QueueNode.
-Interogările citite din fișier sunt stocate într-o coadă implementată cu listă simplu înlănțuită și procesate în ordinea primirii.
+### 4. Queue
+Structures: Queue and QueueNode.
+The queries read from the file are stored in a queue implemented with a singly linked list and processed in the order they are received.
 
-De ce este eficient?
-Interogările trebuiesc procesate în ordinea procesării, iar această structură este cea mai adecvată. Inserarea și extragerea sunt ambele O(1).
+Why is it efficient?
+The queries must be processed in the order of processing, and this structure is the most suitable. Insertion and extraction are both O(1).
 
-### 5.Min-Heap
-Structurile: MinHeap și HeapNode.
-Folosit în algoritmul Dijkstra pentru a găsi eficient nodul cu distanța minimă față de sursă.
+### 5. Min-Heap
+Structures: MinHeap and HeapNode.
+Used in Dijkstra's algorithm to efficiently find the node with the minimum distance from the source.
 
-De ce este eficient?
-Extragerea minimului dintr-un vector nesortat este O(n). Min-Heap-ul oferă O(log n) atât pentru inserare cât și pentru extragere, reducând complexitatea totală pentru Dijkstra.
+Why is it efficient?
+Extracting the minimum from an unsorted array is O(n). The Min-Heap offers O(log n) for both insertion and extraction, reducing the total complexity for Dijkstra.
 
-## Complexitatea operațiilor pentru interogare
-Operație: 'EXISTS'
-Complexitate: O(log n)
-Justificare: Caută în BST după nume
+## The complexity of query operations
+Operation: 'EXISTS'
+Complexity: O(log n)
+Justification: Searches in the BST by name
 
-Operație: 'EDGE'
-Complexitate: O(log n + număr de muchii ale sursei)
-Justificare: Caută în BST pentru nodul sursă și parcurge lista acestuia de muchii
+Operation: 'EDGE'
+Complexity: O(log n + number of edges of the source)
+Justification: Searches in the BST for the source node and traverses its list of edges
 
-Operație: 'NEIGHBORS'
-Complexitate: O(log n + numărul de muchii ale sursei)
-Justificare: Caută în BST și parcurge lista completă de muchii de ieșire
+Operation: 'NEIGHBORS'
+Complexity: O(log n + number of edges of the source)
+Justification: Searches in the BST and traverses the complete list of outgoing edges
 
-## Complexitatea algoritmilor de drum
+## The complexity of path algorithms
 
 ### PATH - BFS
-Complexitate: O(n+m)
-Justificare: BFS vizitează fiecare nod și fiecare muchie maxim o singură dată. Folosește o coadă pentru a explora graful pe nivele, garantând că primul drum găsit are numărul minim de muchii. Drumul este reconstruit parcurgând vectorul de părinți reținut din timpul BFS-ului.
+Complexity: O(n+m)
+Justification: BFS visits each node and each edge at most once. It uses a queue to explore the graph by levels, guaranteeing that the first found path has the minimum number of edges. The path is reconstructed by traversing the parent array kept from during the BFS.
 
 ### Dijkstra
-Complexitate: O((n+m) * log n)
-Justificare:
-- n extrageri din heap, fiecare cu O(log n)
-- m relaxări de muchii, fiecare cu O(log n)
+Complexity: O((n+m) * log n)
+Justification:
+- n heap extractions, each taking O(log n)
+- m edge relaxations, each taking O(log n)
 => Total: O((n+m) * log n)
-O căutare liniară ar implica O(n) per extragere fiind ineficient. Min-heap-ul reduce selecția la O(log n) obținând eficiență.
+A linear search would imply O(n) per extraction, being inefficient. The min-heap reduces the selection to O(log n), achieving efficiency.
